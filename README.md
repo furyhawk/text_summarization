@@ -23,10 +23,10 @@ conda env create --name text --file text.yml
 conda activate text
 ```
 
-Now you can start the Jupyter notebook server:
+Now you can start the Jupyter lab server:
 
 ```sh
-jupyter notebook
+jupyter lab
 ```
 
 If working on WSL under Windows, add `--no-browser`.
