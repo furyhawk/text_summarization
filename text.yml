@@ -31,13 +31,18 @@ dependencies:
   - gensim
   - wordcloud
   - ipywidgets
-  
-  
-  # - pip
+  - wikipedia-api
+  - sumy
+  - wikipedia-api
 
-  # - pip:
-  #   # add pip-distributed libraries
-  #   - beautifulsoup4
+  
+  
+  - pip
+
+  - pip:
+    # add pip-distributed libraries
+    - rouge_score
+
   #   - nltk
   #   - spacy>=2.3.2
   #   # - textacy
