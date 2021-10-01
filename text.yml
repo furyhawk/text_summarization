@@ -30,6 +30,7 @@ dependencies:
   - textacy
   - gensim
   - wordcloud
+  - ipywidgets
   
   
   # - pip
