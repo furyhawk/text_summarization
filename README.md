@@ -12,9 +12,9 @@ git clone https://github.com/furyhawk/text_summarization.git
 cd text_summarization
 ```
 
-Otherwise download the zip file, unpack it to a location convenient to you, and open a command line terminal in the project directory `blueprints-text`.
+Otherwise download the zip file, unpack it to a location convenient to you, and open a command line terminal in the project directory `text_summarization`.
 
-For local setup, we recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html). If you already have Anaconda or Miniconda installed on your system: That's fine. We will create a separate virtual environment for the blueprints book so that our installation will not interfere with your previous setup.
+For local setup, we recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html).
 
 After installation of Anaconda/Miniconda, run the following command(s) from the project directory:
 
