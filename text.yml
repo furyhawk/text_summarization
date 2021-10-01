@@ -43,13 +43,3 @@ dependencies:
     # add pip-distributed libraries
     - rouge_score
 
-  #   - nltk
-  #   - spacy>=2.3.2
-  #   # - textacy
-  #   # use this updated version of textacy to make it install with spacy 3.0
-  #   # careful - it's not completely tested except for the code in the book
-  #   # otherwise use spacy=2.3.2
-  #   - git+https://github.com/blueprints-for-text-analytics-python/textacy.git
-  #   - gensim
-  #   - pyldavis
-  #   - wordcloud
