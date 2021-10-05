@@ -35,6 +35,7 @@ dependencies:
   - sumy
   - wikipedia-api
   - pytorch_transformers
+  - transformers
 
   
   
