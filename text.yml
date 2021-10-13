@@ -36,6 +36,7 @@ dependencies:
   - wikipedia-api
   - pytorch_transformers
   - transformers
+  - datasets
 
   
   
