@@ -47,12 +47,12 @@ class TextSummaryModel:
 
 
 app = FastAPI()
-newgroups_model = TextSummaryModel()
+textsummary_model = TextSummaryModel()
 
 
 @app.post("/prediction")
 def prediction(
-    output: PredictionOutput = Depends(newgroups_model.predict),
+    output: PredictionOutput = Depends(textsummary_model.predict),
 ) -> PredictionOutput:
     return output
 
@@ -64,4 +64,4 @@ def delete_cache():
 
 @app.on_event("startup")
 async def startup():
-    newgroups_model.load_model()
+    textsummary_model.load_model()
