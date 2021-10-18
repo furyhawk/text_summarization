@@ -37,6 +37,8 @@ dependencies:
   - pytorch_transformers
   - transformers
   - datasets
+  - uvicorn
+  - fastapi
 
   
   

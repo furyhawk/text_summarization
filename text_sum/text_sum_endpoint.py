@@ -1,11 +1,11 @@
+import uvicorn
 import os
+import logging
 from typing import List, Optional, Tuple
 
-import joblib
+from transformers import pipeline
 from fastapi import FastAPI, Depends, status
-from joblib import memory
 from pydantic import BaseModel
-from sklearn.pipeline import Pipeline
 
 
 class PredictionInput(BaseModel):
@@ -13,55 +13,54 @@ class PredictionInput(BaseModel):
 
 
 class PredictionOutput(BaseModel):
-    category: str
-
-
-memory = joblib.Memory(location="cache.joblib")
-
-
-@memory.cache(ignore=["model"])
-def predict(model: Pipeline, text: str) -> int:
-    prediction = model.predict([text])
-    return prediction[0]
-
+    summarized: str
 
 class TextSummaryModel:
-    model: Optional[Pipeline]
+    model: Optional[pipeline]
     targets: Optional[List[str]]
 
     def load_model(self):
         """Loads the model"""
-        model_file = os.path.join(os.path.dirname(__file__), "textsummary_model.joblib")
-        loaded_model: Tuple[Pipeline, List[str]] = joblib.load(model_file)
-        model, targets = loaded_model
-        self.model = model
-        self.targets = targets
+        # Initialize the HuggingFace summarization pipeline
+        summarizer = pipeline("summarization")
+        self.model = summarizer
+        logger.info(self.model)
 
     def predict(self, input: PredictionInput) -> PredictionOutput:
         """Runs a prediction"""
-        if not self.model or not self.targets:
+        if not self.model:
             raise RuntimeError("Model is not loaded")
-        prediction = predict(self.model, input.text)
-        category = self.targets[prediction]
-        return PredictionOutput(category=category)
 
+        logger.info(input.text)
+        summarized = self.model(input.text, min_length=75, max_length=300)
+        # Print summarized text
+        logger.info(summarized)
 
-app = FastAPI()
+        return PredictionOutput(summarized=summarized[0]["summary_text"])
+
+app = FastAPI(debug=True)
+logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
 
-
-@app.post("/prediction")
+@app.post("/prediction", response_model=PredictionOutput)
+# async def prediction(predictionInput: PredictionInput):
+#     return textsummary_model.predict(predictionInput)
 def prediction(
     output: PredictionOutput = Depends(textsummary_model.predict),
 ) -> PredictionOutput:
     return output
 
-
-@app.delete("/cache", status_code=status.HTTP_204_NO_CONTENT)
-def delete_cache():
-    memory.clear()
-
-
 @app.on_event("startup")
 async def startup():
+    # Initialize the HuggingFace summarization pipeline
+    # summarizer = pipeline("summarization")
+    # self.model = summarizer
+    # logger = logging.getLogger("uvicorn.access")
+    # handler = logging.StreamHandler()
+    # handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    # logger.addHandler(handler)
+    logger.info("start")
     textsummary_model.load_model()
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
