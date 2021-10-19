@@ -28,3 +28,14 @@ jupyter lab
 ```
 
 If working on WSL under Windows, add `--no-browser`.
+
+## Backend Setup
+
+Container setup
+```sh
+docker build -t textsum .
+docker run -d --name textsum_endpoint -p 8000:8000 textsum
+```
+
+Test backend on
+http://localhost:8000/docs
