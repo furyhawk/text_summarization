@@ -38,7 +38,7 @@ export default function TextInput({ text, setText, textList, setTextList }) {
         <form>
             <label>
                 Raw Text:
-                <textarea value={text} placeholder="Input sample text to summarize." onChange={handleChange} rows={8} cols={80} />
+                <textarea value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} />
             </label>
             <button type="submit" className="btn btn-primary" onClick={submit}>Submit</button>
         </form>

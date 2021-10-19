@@ -4,7 +4,7 @@ import TextInput from "./TextInput";
 import TextList from "../TextList/TextList";
 
 export default function TextSummarizationView() {
-    const [text, setText] = useState("Input text summary.");
+    const [text, setText] = useState("");
     const [textList, setTextList] = useState([]);
 
     console.log("start TextSummarizationView");
