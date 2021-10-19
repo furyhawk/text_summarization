@@ -1,9 +1,11 @@
-export default function TextList({ textList, getUrl }) {
+export default function TextList({ textList }) {
     return (
         <div>
-            <ul className="bookables items-list-nav">
+            <ul className="textlist items-list-nav">
                 {textList.map(b => (
-                    <li key={b.id}></li>
+                    <li key={b.id}>
+                        {b.text}
+                    </li>
 
                 ))}
             </ul>
