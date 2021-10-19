@@ -5,6 +5,7 @@ from typing import List, Optional, Tuple
 
 from transformers import pipeline
 from fastapi import FastAPI, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
@@ -41,6 +42,19 @@ class TextSummaryModel:
 app = FastAPI(debug=True)
 logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/prediction", response_model=PredictionOutput)
 # async def prediction(predictionInput: PredictionInput):

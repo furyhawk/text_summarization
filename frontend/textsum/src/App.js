@@ -16,13 +16,13 @@ function App() {
       <div className="App">
         <header className="App-header">
           <nav>
-            <ul>
-              <li>
+            {/* <ul>
+              <li> */}
                 <Link to="/textSummarization" className=''>
                   <span>Text Summarization</span>
                 </Link>
-              </li>
-            </ul>
+              {/* </li>
+            </ul> */}
           </nav>
         </header>
         <Routes>
