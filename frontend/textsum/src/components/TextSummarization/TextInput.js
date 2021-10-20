@@ -1,7 +1,14 @@
+import { useState } from "react";
 
 export default function TextInput({ text, setText, textList, setTextList }) {
+
+    const [textRef, setTextRef] = useState("");
+
     function handleChange(event) {
         setText(event.target.value);
+    }
+    function handleRefChange(event) {
+        setTextRef(event.target.value);
     }
 
     function submit(event) {
@@ -21,13 +28,13 @@ export default function TextInput({ text, setText, textList, setTextList }) {
 
             },
 
-            body: JSON.stringify({ text: text })
+            body: JSON.stringify({ text: text, reference: textRef })
 
         }).then((result) => {
 
             result.json().then((res) => {
                 console.warn('res', res);
-                setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9), "text": res.summarized }));
+                setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9), "text": res.summarized + res.metrics }));
             })
 
         })
@@ -40,7 +47,11 @@ export default function TextInput({ text, setText, textList, setTextList }) {
                 Raw Text:
                 <textarea value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} />
             </label>
-            <button type="submit" className="btn btn-primary" onClick={submit}>Submit</button>
+            <button type="submit" className="btn btn-primary" onClick={submit}>Summarize</button>
+            <label>
+                Reference Text:
+                <textarea value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} />
+            </label>
         </form>
     );
 }
