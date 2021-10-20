@@ -13,6 +13,7 @@ from rouge_score import rouge_scorer
 class PredictionInput(BaseModel):
     text: str
     reference: str
+    modelId: str
 
 
 class PredictionOutput(BaseModel):

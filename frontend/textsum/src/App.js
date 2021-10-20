@@ -16,16 +16,13 @@ function App() {
       <div className="App">
         <header className="App-header">
           <nav>
-            {/* <ul>
-              <li> */}
-                <Link to="/textSummarization" className=''>
-                  <span>Text Summarization</span>
-                </Link>
-              {/* </li>
-            </ul> */}
+            <Link to="/textSummarization" className=''>
+              <span>Text Summarization</span>
+            </Link>
           </nav>
         </header>
         <Routes>
+          <Route path="/" element={<TextSummarizationPage />} />
           <Route path="/textSummarization" element={<TextSummarizationPage />} />
         </Routes>
       </div>
