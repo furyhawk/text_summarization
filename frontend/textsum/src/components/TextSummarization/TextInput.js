@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import Spinner from "../UI/Spinner";
 
 export default function TextInput({ text, setText, textList, setTextList, metrics, setmetrics, model }) {
 
@@ -74,7 +74,7 @@ export default function TextInput({ text, setText, textList, setTextList, metric
                         onChange={handleChange} disabled={busy} minlength={30}
                         required={true} resize="none" />
                     {busy ?
-                        (<Spinner />) : (<Button type="submit" onClick={submit}
+                        (<CircularProgress />) : (<Button type="submit" onClick={submit}
                             variant="contained" endIcon={<SendIcon />}
                             size="large" ><span>Summarize</span></Button>)}
                 </Stack>

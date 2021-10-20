@@ -16,7 +16,7 @@ export default function TextList({ textList }) {
                     justifyContent="center"
                     alignItems="center"
                     spacing={2}>
-                    
+
                     <Typography gutterBottom variant="h4" component="div">
                         Summarized List
                     </Typography>
@@ -25,17 +25,20 @@ export default function TextList({ textList }) {
                     </Badge>
 
                 </Stack>
-                {textList.map(b => (
-                    <ListItem key={b.id}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                {b.text}
-                            </CardContent>
-                        </Card>
+                {textList
+                    .slice(0)
+                    .reverse()
+                    .map(b => (
+                        <ListItem key={b.id}>
+                            <Card variant="outlined">
+                                <CardContent>
+                                    {b.text}
+                                </CardContent>
+                            </Card>
 
-                    </ListItem>
+                        </ListItem>
 
-                ))}
+                    ))}
             </List>
         </div>
     )
