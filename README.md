@@ -39,3 +39,11 @@ docker run -d --name textsum_endpoint -p 8000:8000 textsum
 
 Test backend on
 http://localhost:8000/docs
+
+## Frontend Setup
+
+```sh
+cd frontend\textsum
+npm install
+npm start
+```

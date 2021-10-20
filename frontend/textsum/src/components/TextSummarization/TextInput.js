@@ -54,12 +54,12 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             <label htmlFor="text" className="field">
                 Raw Text:
             </label>
-            <textarea name="text" value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} disabled={busy} minlength={30} />
+            <textarea name="text" className="textarea" value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} disabled={busy} minlength={30} required={true} resize="none" />
             {busy ? (<Spinner />) : (<button type="submit" className="btn btn-primary" onClick={submit}><span>Summarize</span></button>)}
             <label htmlFor="reference" className="field">
                 Reference Text:
             </label>
-            <textarea name="reference" value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} disabled={busy} />
+            <textarea name="reference" className="textarea" value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} disabled={busy} />
         </form >
     );
 }
