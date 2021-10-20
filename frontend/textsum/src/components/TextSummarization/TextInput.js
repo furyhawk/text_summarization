@@ -1,8 +1,11 @@
 import { useState } from "react";
 
+import Spinner from "../UI/Spinner";
+
 export default function TextInput({ text, setText, textList, setTextList, metrics, setmetrics, model }) {
 
     const [textRef, setTextRef] = useState("");
+    const [busy, setBusy] = useState(false);
 
     function handleChange(event) {
         setText(event.target.value);
@@ -18,6 +21,8 @@ export default function TextInput({ text, setText, textList, setTextList, metric
 
         event.preventDefault();
 
+        setBusy(true);
+
         fetch(url, {
 
             method: 'POST',
@@ -32,6 +37,7 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             body: JSON.stringify({ text: text, reference: textRef, modelId: model })
 
         }).then((result) => {
+            setBusy(false);
 
             result.json().then((res) => {
                 console.warn('res', res);
@@ -48,12 +54,12 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             <label htmlFor="text" className="field">
                 Raw Text:
             </label>
-            <textarea name="text" value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} />
-            <button type="submit" className="btn btn-primary" onClick={submit}><span>Summarize</span></button>
+            <textarea name="text" value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} disabled={busy} minlength={30} />
+            {busy ? (<Spinner />) : (<button type="submit" className="btn btn-primary" onClick={submit}><span>Summarize</span></button>)}
             <label htmlFor="reference" className="field">
                 Reference Text:
             </label>
-            <textarea name="reference" value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} />
-        </form>
+            <textarea name="reference" value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} disabled={busy} />
+        </form >
     );
 }
