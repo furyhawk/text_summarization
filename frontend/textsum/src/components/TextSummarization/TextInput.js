@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+
 import Spinner from "../UI/Spinner";
 
 export default function TextInput({ text, setText, textList, setTextList, metrics, setmetrics, model }) {
@@ -50,16 +56,37 @@ export default function TextInput({ text, setText, textList, setTextList, metric
     }
 
     return (
-        <form>
-            <label htmlFor="text" className="field">
-                Raw Text:
-            </label>
-            <textarea name="text" className="textarea" value={text} placeholder="Input text summary." onChange={handleChange} rows={8} cols={80} disabled={busy} minlength={30} required={true} resize="none" />
-            {busy ? (<Spinner />) : (<button type="submit" className="btn btn-primary" onClick={submit}><span>Summarize</span></button>)}
-            <label htmlFor="reference" className="field">
-                Reference Text:
-            </label>
-            <textarea name="reference" className="textarea" value={textRef} placeholder="Input reference summary." onChange={handleRefChange} rows={8} cols={80} disabled={busy} />
-        </form >
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '100ch' },
+            }}
+            noValidate
+            autoComplete="off">
+            <div>
+                <Stack direction="row"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing={{ xs: 1, sm: 2, md: 4 }}>
+                    <TextField label="Raw Text"
+                        multiline value={text}
+                        placeholder="Input text summary."
+                        onChange={handleChange} disabled={busy} minlength={30}
+                        required={true} resize="none" />
+                    {busy ?
+                        (<Spinner />) : (<Button type="submit" onClick={submit}
+                            variant="contained" endIcon={<SendIcon />}
+                            size="large" ><span>Summarize</span></Button>)}
+                </Stack>
+                <TextField
+                    label="Reference Text"
+                    value={textRef}
+                    placeholder="Input reference summary."
+                    onChange={handleRefChange}
+                    multiline
+                    maxRows={3}
+                    disabled={busy} />
+            </div>
+        </Box >
     );
 }
