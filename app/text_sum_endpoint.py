@@ -9,6 +9,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from rouge_score import rouge_scorer
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk import tokenize
+import numpy as np
+
 
 class PredictionInput(BaseModel):
     text: str
@@ -42,23 +46,46 @@ class TextSummaryModel:
         gold_standard = input.reference
         modelId = input.modelId
 
-        summarized = self.model(input.text, min_length=75, max_length=300)
-        summary = summarized[0]["summary_text"]
+        summary = 'No result'
+        if modelId == 'Transformer':
+            summary = self.transformer_summary(
+                text=input.text, min_length=75, max_length=300)
+        if modelId == 'TFIDF':
+            summary = self.tfidf_summary(
+                text=input.text, num_summary_sentence=3)
 
         # Print summarized text
         logger.info(summary)
         scorer = rouge_scorer.RougeScorer(
             ['rouge1', 'rougeL'], use_stemmer=True)
         scores = scorer.score(gold_standard, summary)
-        print(scores)
-        # self.print_rouge_score(scores)
+        self.print_rouge_score(scores)
 
         return PredictionOutput(summarized=summary, metrics=str(scores))
 
-    def print_rouge_score(rouge_score):
+    def print_rouge_score(self, rouge_score):
         for k, v in rouge_score.items():
             print(k, 'Precision:', "{:.2f}".format(v.precision), 'Recall:', "{:.2f}".format(
                 v.recall), 'fmeasure:', "{:.2f}".format(v.fmeasure))
+
+    def tfidf_summary(self, text, num_summary_sentence):
+        summary_sentence = ''
+        sentences = tokenize.sent_tokenize(text)
+        tfidfVectorizer = TfidfVectorizer()
+        words_tfidf = tfidfVectorizer.fit_transform(sentences)
+        sentence_sum = words_tfidf.sum(axis=1)
+        important_sentences = np.argsort(sentence_sum, axis=0)[::-1]
+        for i in range(0, len(sentences)):
+            if i in important_sentences[:num_summary_sentence]:
+                summary_sentence = summary_sentence + sentences[i]
+                
+        print(summary_sentence)
+        return summary_sentence
+
+    def transformer_summary(self, text, min_length=75, max_length=300):
+        summarized = self.model(
+            text, min_length=min_length, max_length=max_length)
+        return summarized[0]["summary_text"]
 
 
 app = FastAPI(debug=True)
@@ -90,14 +117,8 @@ def prediction(
 
 @app.on_event("startup")
 async def startup():
-    # Initialize the HuggingFace summarization pipeline
-    # summarizer = pipeline("summarization")
-    # self.model = summarizer
-    # logger = logging.getLogger("uvicorn.access")
-    # handler = logging.StreamHandler()
-    # handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-    # logger.addHandler(handler)
     logger.info("start")
+    # Initialize the HuggingFace summarization pipeline
     textsummary_model.load_model()
 
 if __name__ == "__main__":

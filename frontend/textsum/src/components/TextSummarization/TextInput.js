@@ -34,10 +34,8 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             method: 'POST',
 
             headers: {
-
                 "Content-type": "application/json; charset=UTF-8",
                 "Access-Control-Allow-Origin": "*"
-
             },
 
             body: JSON.stringify({ text: text, reference: textRef, modelId: model })
@@ -52,7 +50,6 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             })
 
         })
-
     }
 
     return (
@@ -71,7 +68,7 @@ export default function TextInput({ text, setText, textList, setTextList, metric
                     <TextField label="Raw Text"
                         multiline value={text}
                         placeholder="Input text summary."
-                        onChange={handleChange} disabled={busy} minlength={30}
+                        onChange={handleChange} disabled={busy} minLength={30}
                         required={true} resize="none" />
                     {busy ?
                         (<CircularProgress />) : (<Button type="submit" onClick={submit}

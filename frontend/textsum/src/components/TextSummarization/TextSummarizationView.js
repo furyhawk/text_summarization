@@ -10,7 +10,7 @@ export default function TextSummarizationView() {
     const [text, setText] = useState("");
     const [textList, setTextList] = useState([]);
     const [metrics, setmetrics] = useState("");
-    const [model, setModel] = useState();
+    const [model, setModel] = useState("Transformer");
 
     console.log("start TextSummarizationView");
 

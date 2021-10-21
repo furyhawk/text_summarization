@@ -5,7 +5,7 @@ channels:
   - plotly 
 
 dependencies:
-  - python=3.9
+  - python=3.10
   - regex 
   - unidecode 
   - tabulate
@@ -34,7 +34,6 @@ dependencies:
   - wikipedia-api
   - sumy
   - wikipedia-api
-  - pytorch_transformers
   - transformers
   - datasets
   - uvicorn

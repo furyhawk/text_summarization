@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function ModelSelect({ model, setModel }) {
-    const [models] = useState(["TDIF", "Transformer"]);
+    const [models] = useState(["TFIDF", "Transformer"]);
 
     useEffect(() => {
         setModel(models[1]);
@@ -20,10 +20,9 @@ export default function ModelSelect({ model, setModel }) {
     return (
         <div>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-helper-label">Model</InputLabel>
+                <InputLabel id="model-select-label">Model</InputLabel>
                 <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
+                    labelId="model-select-label"
                     autoWidth
                     value={model}
                     label="Model"
