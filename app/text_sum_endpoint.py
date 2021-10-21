@@ -38,12 +38,17 @@ class TextSummaryModel:
             raise RuntimeError("Model is not loaded")
 
         logger.info(input.text)
+
+        gold_standard = input.reference
+        modelId = input.modelId
+
         summarized = self.model(input.text, min_length=75, max_length=300)
         summary = summarized[0]["summary_text"]
-        gold_standard = input.reference
+
         # Print summarized text
         logger.info(summary)
-        scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
+        scorer = rouge_scorer.RougeScorer(
+            ['rouge1', 'rougeL'], use_stemmer=True)
         scores = scorer.score(gold_standard, summary)
         print(scores)
         # self.print_rouge_score(scores)
