@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,11 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function ModelSelect({ model, setModel }) {
-    const [models] = useState(["TFIDF", "Transformer"]);
-
-    useEffect(() => {
-        setModel(models[1]);
-    }, [models, setModel]);
+    const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned"]);
 
     function handleSelect(e) {
         setModel(e.target.value);
@@ -28,8 +24,8 @@ export default function ModelSelect({ model, setModel }) {
                     label="Model"
                     onChange={handleSelect}
                 >
-                    {models.map(u => (
-                        <MenuItem value={u}>{u}</MenuItem>
+                    {models.map((u, index) => (
+                        <MenuItem key={index} value={u}>{u}</MenuItem>
                     ))}
                 </Select>
                 <FormHelperText>Select model to use</FormHelperText>

@@ -3,7 +3,7 @@ import os
 import logging
 from typing import List, Optional, Tuple
 
-from transformers import pipeline
+from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 from fastapi import FastAPI, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -53,6 +53,12 @@ class TextSummaryModel:
         if modelId == 'TFIDF':
             summary = self.tfidf_summary(
                 text=input.text, num_summary_sentence=3)
+        if modelId == 'T5':
+            summary = self.t5_summary(
+                text=input.text, min_length=75, max_length=300)
+        if modelId == 'Finetuned':
+            summary = self.finetuned_summary(
+                text=input.text, min_length=75, max_length=300)
 
         # Print summarized text
         logger.info(summary)
@@ -78,7 +84,7 @@ class TextSummaryModel:
         for i in range(0, len(sentences)):
             if i in important_sentences[:num_summary_sentence]:
                 summary_sentence = summary_sentence + sentences[i]
-                
+
         print(summary_sentence)
         return summary_sentence
 
@@ -87,6 +93,31 @@ class TextSummaryModel:
             text, min_length=min_length, max_length=max_length)
         return summarized[0]["summary_text"]
 
+    def t5_summary(self, text, min_length=75, max_length=300):
+        model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
+        tokenizer = AutoTokenizer.from_pretrained("t5-base")
+
+        # T5 uses a max_length of 512 so we cut the article to 512 tokens.
+        inputs = tokenizer("summarize: " + text,
+                           return_tensors="pt", max_length=512, truncation=True)
+        outputs = model.generate(inputs["input_ids"], max_length,
+                                 min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
+        summary = tokenizer.decode(outputs[0])                                 
+        print(summary)
+        return summary
+
+    def finetuned_summary(self, text, min_length=75, max_length=300):
+        model = AutoModelForSeq2SeqLM.from_pretrained("furyhawk/t5-small-finetuned-xsum")
+        tokenizer = AutoTokenizer.from_pretrained("furyhawk/t5-small-finetuned-xsum")
+
+        # T5 uses a max_length of 512 so we cut the article to 512 tokens.
+        inputs = tokenizer("summarize: " + text,
+                           return_tensors="pt", max_length=512, truncation=True)
+        outputs = model.generate(inputs["input_ids"], max_length,
+                                 min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
+        summary = tokenizer.decode(outputs[0])                                 
+        print(summary)
+        return summary
 
 app = FastAPI(debug=True)
 logger = logging.getLogger("app")
