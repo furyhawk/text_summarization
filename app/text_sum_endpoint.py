@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from rouge_score import rouge_scorer
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+import nltk
 from nltk import tokenize
 import numpy as np
 
@@ -30,6 +31,7 @@ class TextSummaryModel:
     targets: Optional[List[str]]
 
     def load_model(self):
+        nltk.download('punkt')
         """Loads the model"""
         # Initialize the HuggingFace summarization pipeline
         summarizer = pipeline("summarization")
