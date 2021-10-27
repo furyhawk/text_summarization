@@ -29,6 +29,11 @@ jupyter lab
 
 If working on WSL under Windows, add `--no-browser`.
 
+
+```sh
+huggingface-cli login
+```
+
 ## Backend Setup
 
 Container setup
@@ -47,3 +52,5 @@ cd frontend\textsum
 npm install
 npm start
 ```
+
+This will create a new browser tab with Summarization App in DEV env.
