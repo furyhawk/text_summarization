@@ -65,7 +65,7 @@ class TextSummaryModel:
         # Print summarized text
         logger.info(summary)
         scorer = rouge_scorer.RougeScorer(
-            ['rouge1', 'rougeL'], use_stemmer=True)
+            ['rouge1', 'rouge2', 'rougeL', 'rougeLsum'], use_stemmer=True)
         scores = scorer.score(gold_standard, summary)
         self.print_rouge_score(scores)
 
@@ -104,22 +104,25 @@ class TextSummaryModel:
                            return_tensors="pt", max_length=512, truncation=True)
         outputs = model.generate(inputs["input_ids"], max_length,
                                  min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
-        summary = tokenizer.decode(outputs[0])                                 
+        summary = tokenizer.decode(outputs[0])
         print(summary)
         return summary
 
     def finetuned_summary(self, text, min_length=75, max_length=300):
-        model = AutoModelForSeq2SeqLM.from_pretrained("furyhawk/t5-small-finetuned-bbc")
-        tokenizer = AutoTokenizer.from_pretrained("furyhawk/t5-small-finetuned-bbc")
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            "furyhawk/t5-small-finetuned-bbc")
+        tokenizer = AutoTokenizer.from_pretrained(
+            "furyhawk/t5-small-finetuned-bbc")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
                            return_tensors="pt", max_length=512, truncation=True)
         outputs = model.generate(inputs["input_ids"], max_length,
                                  min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
-        summary = tokenizer.decode(outputs[0])                                 
+        summary = tokenizer.decode(outputs[0])
         print(summary)
         return summary
+
 
 app = FastAPI(debug=True)
 logger = logging.getLogger("app")

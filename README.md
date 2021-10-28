@@ -30,6 +30,8 @@ jupyter lab
 If working on WSL under Windows, add `--no-browser`.
 
 
+Login to huggingface as needed:
+
 ```sh
 huggingface-cli login
 ```
