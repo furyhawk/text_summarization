@@ -51,16 +51,16 @@ class TextSummaryModel:
         summary = 'No result'
         if modelId == 'Transformer':
             summary = self.transformer_summary(
-                text=input.text, min_length=3, max_length=30)
+                text=input.text, min_length=3, max_length=50)
         if modelId == 'TFIDF':
             summary = self.tfidf_summary(
                 text=input.text, num_summary_sentence=1)
         if modelId == 'T5':
             summary = self.t5_summary(
-                text=input.text, min_length=3, max_length=30)
+                text=input.text, min_length=3, max_length=50)
         if modelId == 'Finetuned':
             summary = self.finetuned_summary(
-                text=input.text, min_length=3, max_length=30)
+                text=input.text, min_length=3, max_length=50)
         if modelId == 'Headline':
             summary = self.headline_summary(
                 text=input.text, min_length=3, max_length=12)
@@ -99,8 +99,8 @@ class TextSummaryModel:
         return summarized[0]["summary_text"]
 
     def t5_summary(self, text, min_length=3, max_length=512):
-        model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
-        tokenizer = AutoTokenizer.from_pretrained("t5-base")
+        model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
+        tokenizer = AutoTokenizer.from_pretrained("t5-small")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
