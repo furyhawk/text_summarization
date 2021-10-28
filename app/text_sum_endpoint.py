@@ -51,16 +51,16 @@ class TextSummaryModel:
         summary = 'No result'
         if modelId == 'Transformer':
             summary = self.transformer_summary(
-                text=input.text, min_length=75, max_length=300)
+                text=input.text, min_length=3, max_length=30)
         if modelId == 'TFIDF':
             summary = self.tfidf_summary(
-                text=input.text, num_summary_sentence=3)
+                text=input.text, num_summary_sentence=1)
         if modelId == 'T5':
             summary = self.t5_summary(
-                text=input.text, min_length=75, max_length=300)
+                text=input.text, min_length=3, max_length=30)
         if modelId == 'Finetuned':
             summary = self.finetuned_summary(
-                text=input.text, min_length=75, max_length=300)
+                text=input.text, min_length=3, max_length=30)
 
         # Print summarized text
         logger.info(summary)
@@ -90,25 +90,25 @@ class TextSummaryModel:
         print(summary_sentence)
         return summary_sentence
 
-    def transformer_summary(self, text, min_length=75, max_length=300):
+    def transformer_summary(self, text, min_length=3, max_length=512):
         summarized = self.model(
             text, min_length=min_length, max_length=max_length)
         return summarized[0]["summary_text"]
 
-    def t5_summary(self, text, min_length=75, max_length=300):
+    def t5_summary(self, text, min_length=3, max_length=512):
         model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
         tokenizer = AutoTokenizer.from_pretrained("t5-base")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
                            return_tensors="pt", max_length=512, truncation=True)
-        outputs = model.generate(inputs["input_ids"], max_length,
-                                 min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
-        summary = tokenizer.decode(outputs[0])
+        outputs = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'], max_length=max_length,
+                                 min_length=min_length, length_penalty=0.1, num_beams=4, early_stopping=True)
+        summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(summary)
         return summary
 
-    def finetuned_summary(self, text, min_length=75, max_length=300):
+    def finetuned_summary(self, text, min_length=3, max_length=512):
         model = AutoModelForSeq2SeqLM.from_pretrained(
             "furyhawk/t5-small-finetuned-bbc")
         tokenizer = AutoTokenizer.from_pretrained(
@@ -117,9 +117,10 @@ class TextSummaryModel:
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
                            return_tensors="pt", max_length=512, truncation=True)
-        outputs = model.generate(inputs["input_ids"], max_length,
-                                 min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
-        summary = tokenizer.decode(outputs[0])
+        outputs = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'], max_length=max_length,
+                                 min_length=min_length, length_penalty=0.1, num_beams=4, early_stopping=True)
+        print(outputs)
+        summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(summary)
         return summary
 
@@ -131,6 +132,8 @@ textsummary_model = TextSummaryModel()
 origins = [
     "http://localhost",
     "http://localhost:3000",
+
+
 ]
 
 app.add_middleware(
@@ -142,7 +145,7 @@ app.add_middleware(
 )
 
 
-@app.post("/prediction", response_model=PredictionOutput)
+@ app.post("/prediction", response_model=PredictionOutput)
 # async def prediction(predictionInput: PredictionInput):
 #     return textsummary_model.predict(predictionInput)
 def prediction(
@@ -151,7 +154,7 @@ def prediction(
     return output
 
 
-@app.on_event("startup")
+@ app.on_event("startup")
 async def startup():
     logger.info("start")
     # Initialize the HuggingFace summarization pipeline
