@@ -61,6 +61,9 @@ class TextSummaryModel:
         if modelId == 'Finetuned':
             summary = self.finetuned_summary(
                 text=input.text, min_length=3, max_length=30)
+        if modelId == 'Headline':
+            summary = self.headline_summary(
+                text=input.text, min_length=3, max_length=12)
 
         # Print summarized text
         logger.info(summary)
@@ -123,6 +126,22 @@ class TextSummaryModel:
         summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(summary)
         return summary
+    
+    def headline_summary(self, text, min_length=3, max_length=512):
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            "furyhawk/t5-small-finetuned-bbc-headline")
+        tokenizer = AutoTokenizer.from_pretrained(
+            "furyhawk/t5-small-finetuned-bbc")
+
+        # T5 uses a max_length of 512 so we cut the article to 512 tokens.
+        inputs = tokenizer("summarize: " + text,
+                           return_tensors="pt", max_length=512, truncation=True)
+        outputs = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'], max_length=max_length,
+                                 min_length=min_length, length_penalty=0.1, num_beams=4, early_stopping=True)
+        print(outputs)
+        summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        print(summary)
+        return summary
 
 
 app = FastAPI(debug=True)
@@ -146,8 +165,6 @@ app.add_middleware(
 
 
 @ app.post("/prediction", response_model=PredictionOutput)
-# async def prediction(predictionInput: PredictionInput):
-#     return textsummary_model.predict(predictionInput)
 def prediction(
     output: PredictionOutput = Depends(textsummary_model.predict),
 ) -> PredictionOutput:

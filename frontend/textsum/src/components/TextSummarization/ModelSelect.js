@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function ModelSelect({ model, setModel }) {
-    const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned"]);
+    const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned", "Headline"]);
 
     function handleSelect(e) {
         setModel(e.target.value);
