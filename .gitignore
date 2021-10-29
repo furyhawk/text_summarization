@@ -112,3 +112,4 @@ notebooks/t5-base-finetuned-bbc-headline/
 app/__pycache__/text_sum_endpoint.cpython-39.pyc
 notebooks/t5-base-finetuned-bbc/
 notebooks/bertviz/
+notebooks/.ipynb_checkpoints/transformation-base-checkpoint.ipynb
