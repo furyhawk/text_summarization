@@ -1,5 +1,4 @@
 import uvicorn
-import os
 import logging
 from typing import List, Optional, Tuple
 
@@ -45,41 +44,61 @@ class TextSummaryModel:
 
         logger.info(input.text)
 
-        gold_standard = input.reference
+        # Parameters
+        target = input.reference
         modelId = input.modelId
 
-        summary = 'No result'
+        min_length = 15
+        max_length = 150
+        headline_min_length = 7
+        headline_max_length = 20
+
+        prediction = 'No result'
+
         if modelId == 'Transformer':
-            summary = self.transformer_summary(
-                text=input.text, min_length=3, max_length=50)
+            prediction = self.transformer_summary(
+                text=input.text, min_length=min_length, max_length=max_length)
         if modelId == 'TFIDF':
-            summary = self.tfidf_summary(
+            prediction = self.tfidf_summary(
                 text=input.text, num_summary_sentence=1)
         if modelId == 'T5':
-            summary = self.t5_summary(
-                text=input.text, min_length=3, max_length=50)
+            prediction = self.t5_summary(
+                text=input.text, min_length=min_length, max_length=max_length)
         if modelId == 'Finetuned':
-            summary = self.finetuned_summary(
-                text=input.text, min_length=3, max_length=50)
+            prediction = self.finetuned_summary(
+                text=input.text, min_length=min_length, max_length=max_length)
         if modelId == 'Headline':
-            summary = self.headline_summary(
-                text=input.text, min_length=3, max_length=12)
+            prediction = self.headline_summary(
+                text=input.text, min_length=headline_min_length, max_length=headline_max_length)
 
         # Print summarized text
-        logger.info(summary)
+        logger.info(prediction)
         scorer = rouge_scorer.RougeScorer(
             ['rouge1', 'rouge2', 'rougeL', 'rougeLsum'], use_stemmer=True)
-        scores = scorer.score(gold_standard, summary)
+        # Calculates rouge scores between the target and prediction.
+        scores = scorer.score(target, prediction)
         self.print_rouge_score(scores)
 
-        return PredictionOutput(summarized=summary, metrics=str(scores))
+        return PredictionOutput(summarized=prediction, metrics=self.output_rouge_score(scores))
 
     def print_rouge_score(self, rouge_score):
+        """format and print rouge score"""
+        # output = ''
         for k, v in rouge_score.items():
             print(k, 'Precision:', "{:.2f}".format(v.precision), 'Recall:', "{:.2f}".format(
                 v.recall), 'fmeasure:', "{:.2f}".format(v.fmeasure))
+        # return output
+
+    def output_rouge_score(self, rouge_score):
+        """format and output rouge score"""
+        output = ''
+        for k, v in rouge_score.items():
+            output += ' ' + k + ' Precision:' + "{:.2f}".format(v.precision) + ' Recall:' + "{:.2f}".format(
+                v.recall) + ' fmeasure:' + "{:.2f}".format(v.fmeasure) + ' '
+        return output
 
     def tfidf_summary(self, text, num_summary_sentence):
+        """tfidf summary"""
         summary_sentence = ''
         sentences = tokenize.sent_tokenize(text)
         tfidfVectorizer = TfidfVectorizer()
@@ -94,6 +113,7 @@ class TextSummaryModel:
         return summary_sentence
 
     def transformer_summary(self, text, min_length=3, max_length=512):
+        """default huggingface transformer pipeline summary task"""
         summarized = self.model(
             text, min_length=min_length, max_length=max_length)
         return summarized[0]["summary_text"]
@@ -126,12 +146,12 @@ class TextSummaryModel:
         summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(summary)
         return summary
-    
+
     def headline_summary(self, text, min_length=3, max_length=512):
         model = AutoModelForSeq2SeqLM.from_pretrained(
-            "furyhawk/t5-small-finetuned-bbc-headline")
+            "furyhawk/t5-base-finetuned-bbc-headline")
         tokenizer = AutoTokenizer.from_pretrained(
-            "furyhawk/t5-small-finetuned-bbc")
+            "furyhawk/t5-base-finetuned-bbc-headline")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,

@@ -38,6 +38,19 @@ huggingface-cli login
 
 ## Backend Setup
 
+Commandline run
+```sh
+uvicorn app.text_sum_endpoint:app --host 0.0.0.0 --port 8000
+```
+
+or
+
+```sh
+python ./app/text_sum_endpoint.py
+```
+
+or
+
 Container setup
 ```sh
 docker build -t textsum .
@@ -55,4 +68,4 @@ npm install
 npm start
 ```
 
-This will create a new browser tab with Summarization App in DEV env.
+This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.

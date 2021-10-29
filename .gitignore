@@ -106,3 +106,5 @@ notebooks/t5-small-finetuned-xsum/
 notebooks/t5-small-finetuned-bbc/
 notebooks/t5-small-finetuned-bbc-headline/
 notebooks/t5-base-finetuned-bbc-headline/
+*.pyc
+*.pyc
