@@ -108,3 +108,5 @@ notebooks/t5-small-finetuned-bbc-headline/
 notebooks/t5-base-finetuned-bbc-headline/
 *.pyc
 *.pyc
+*.pyc
+app/__pycache__/text_sum_endpoint.cpython-39.pyc
