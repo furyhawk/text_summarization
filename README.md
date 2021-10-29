@@ -21,6 +21,14 @@ conda env create --name text --file text.yml
 conda activate text
 ```
 
+For windows:
+download git-lfs from https://git-lfs.github.com/
+and install
+
+```sh
+git lfs install
+```
+
 Now you can start the Jupyter lab server:
 
 ```sh

@@ -17,7 +17,7 @@ import textwrap
 import sqlite3
 import logging
 
-import spacy
+# import spacy
 import nltk
 
 from tqdm.auto import tqdm
@@ -48,5 +48,5 @@ plot_params = {'figure.figsize': (8, 4),
 # adjust matplotlib defaults
 matplotlib.rcParams.update(plot_params)
 
-import seaborn as sns
-sns.set_style("darkgrid")
+# import seaborn as sns
+# sns.set_style("darkgrid")

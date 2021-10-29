@@ -3,9 +3,10 @@ pydantic>=1.8.0,<2.0.0
 uvicorn>=0.15.0,<0.16.0
 nltk
 numpy
+pandas
+matplotlib
 scikit-learn
-transformers
-datasets
+ipywidgets
 rouge_score
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.9.1+cpu
