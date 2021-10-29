@@ -107,7 +107,7 @@ notebooks/t5-small-finetuned-bbc/
 notebooks/t5-small-finetuned-bbc-headline/
 notebooks/t5-base-finetuned-bbc-headline/
 *.pyc
-app/__pycache__/
+__pycache__/
 notebooks/t5-base-finetuned-bbc/
 notebooks/bertviz/
 notebooks/.ipynb_checkpoints/
