@@ -76,4 +76,12 @@ npm install
 npm start
 ```
 
+or
+
+for dockerize dev environment
+
+```sh
+cd frontend\textsum
+docker-compose -f docker-compose.dev.yml up -d
+```
 This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.
