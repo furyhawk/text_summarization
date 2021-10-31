@@ -3,7 +3,7 @@ services:
     frontend:
         build: 
             context: .
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         command: npm start
         container_name: textsum_frontend
         ports:
