@@ -119,8 +119,8 @@ class TextSummaryModel:
         return summarized[0]["summary_text"]
 
     def t5_summary(self, text, min_length=3, max_length=512):
-        model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
-        tokenizer = AutoTokenizer.from_pretrained("t5-small")
+        model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
+        tokenizer = AutoTokenizer.from_pretrained("t5-base")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
@@ -133,9 +133,9 @@ class TextSummaryModel:
 
     def finetuned_summary(self, text, min_length=3, max_length=512):
         model = AutoModelForSeq2SeqLM.from_pretrained(
-            "furyhawk/t5-small-finetuned-bbc")
+            "furyhawk/t5-base-finetuned-bbc")
         tokenizer = AutoTokenizer.from_pretrained(
-            "furyhawk/t5-small-finetuned-bbc")
+            "furyhawk/t5-base-finetuned-bbc")
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
         inputs = tokenizer("summarize: " + text,
