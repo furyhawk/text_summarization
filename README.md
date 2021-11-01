@@ -61,8 +61,8 @@ or
 
 Container setup
 ```sh
-docker build -t textsum .
-docker run -d --name textsum_endpoint -p 8000:8000 textsum
+docker build -t textsum_endpoint .
+docker run -d --name textsum_endpoint -p 8000:8000 textsum_endpoint
 ```
 
 Test backend on
@@ -78,8 +78,7 @@ npm start
 
 or
 
-for dockerize dev environment
-
+for dockerized dev environment
 ```sh
 cd frontend\textsum
 docker-compose -f docker-compose.dev.yml up -d

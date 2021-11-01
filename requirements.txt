@@ -5,6 +5,8 @@ nltk
 numpy
 pandas
 matplotlib
+transformers
+datasets
 scikit-learn
 ipywidgets
 rouge_score
