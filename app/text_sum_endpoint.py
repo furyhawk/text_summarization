@@ -142,7 +142,6 @@ class TextSummaryModel:
                            return_tensors="pt", max_length=512, truncation=True)
         outputs = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'], max_length=max_length,
                                  min_length=min_length, length_penalty=0.1, num_beams=4, early_stopping=True)
-        print(outputs)
         summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(summary)
         return summary
