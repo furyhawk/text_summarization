@@ -2,7 +2,7 @@
 ML Text Summarization project
 
 This project is to build and deploy:
-- [x] A model by using transfer learning from a pretrained T5 model and fine-tuning with BBC News summary dataset. 
+- [x] A summarization model by using transfer learning from a pretrained T5 model and fine-tuning with BBC News summary dataset. 
 - [x] A backend application to initialize and serve the summarization model.
 - [x] A REACT web application that input text and output summarized text. The application will provide evaluation metrics when reference summary is provided. 
 
