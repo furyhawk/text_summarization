@@ -1,6 +1,13 @@
 # text_summarization
 ML Text Summarization project
 
+This project is to build and deploy:
+•	A REACT web application that input text and output summarized text. The application will provide evaluation metrics when reference summary is provided. 
+•	A model to perform summarization task.
+•	A backend application to initialize and serve the summarization model.
+
+This project will create a pretrained T5 model to perform summarization task as the baseline model. Create a new model by using transfer learning from a pretrained T5 model and fine-tuning with BBC News summary dataset. 
+
 ## Local Setup
 
 The following instructions should work on Linux, Windows and MacOS. If you are a Windows user familiar with Linux, you should check out the [Windows Subsystem for Linux, Version 2 (WSL2)](https://docs.microsoft.com/en-us/windows/wsl/). This allows to use a Linux system on the Windows machine. However, using native Windows should also be no problem.
