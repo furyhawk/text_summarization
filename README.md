@@ -95,3 +95,7 @@ This will create a new browser tab with Summarization App in DEV env. Run again 
 ```sh
 run
 ```
+
+# Credits
+https://github.com/huggingface/notebooks/blob/master/examples/summarization.ipynb
+https://github.com/blueprints-for-text-analytics-python/blueprints-text
