@@ -101,3 +101,5 @@ run
 https://github.com/huggingface/notebooks/blob/master/examples/summarization.ipynb
 
 https://github.com/blueprints-for-text-analytics-python/blueprints-text
+
+https://github.com/jessevig/bertviz.git
