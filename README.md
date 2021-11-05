@@ -98,6 +98,8 @@ cd frontend\textsum
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
+Test frontend on
+http://localhost:3000/
 
 ## Just run
 ```sh
