@@ -6,6 +6,7 @@ This project is to build and deploy:
 - [x] A backend application to initialize and serve the summarization model.
 - [x] A REACT web application that input text and output summarized text. The application will provide evaluation metrics when reference summary is provided. 
 
+![Example](https://github.com/furyhawk/text_summarization/blob/main/example00.png?raw=true)
 
 ## Local Setup
 
@@ -18,6 +19,9 @@ git clone https://github.com/furyhawk/text_summarization.git
 cd text_summarization
 ```
 
+
+
+### Jupyter notebooks setup
 For local setup, we recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html).
 
 After installation of Anaconda/Miniconda, run the following command(s) from the project directory:
