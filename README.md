@@ -20,7 +20,7 @@ cd text_summarization
 ```
 
 
-Skip to Backend and Frontend setup if you do not need to run the notebooks.
+Skip to [Backend](https://github.com/furyhawk/text_summarization#backend-setup) and [Frontend](https://github.com/furyhawk/text_summarization#frontend-setup) setup if you do not need to run the notebooks.
 
 ### Jupyter notebooks setup
 For local setup, we recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html).
