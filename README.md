@@ -6,7 +6,7 @@ This project is to build and deploy:
 - [x] A backend application to initialize and serve the summarization model.
 - [x] A REACT web application that input text and output summarized text. The application will provide evaluation metrics when reference summary is provided. 
 
-![Example](https://github.com/furyhawk/text_summarization/blob/main/example00.png?raw=true)
+![Example](https://github.com/furyhawk/text_summarization/blob/main/img/example00.png?raw=true)
 
 ## Local Setup
 
