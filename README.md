@@ -20,6 +20,7 @@ cd text_summarization
 ```
 
 
+Skip to Backend and Frontend setup if you do not need to run the notebooks.
 
 ### Jupyter notebooks setup
 For local setup, we recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html).
@@ -48,7 +49,7 @@ jupyter lab
 If working on WSL under Windows, add `--no-browser`.
 
 
-Login to huggingface as needed:
+If you need to fine tune your own model, sign up free at https://huggingface.co/ . Login to huggingface as needed:
 
 ```sh
 huggingface-cli login
@@ -56,7 +57,7 @@ huggingface-cli login
 
 ## Backend Setup
 
-Commandline run
+#### Commandline run
 ```sh
 uvicorn app.text_sum_endpoint:app --host 0.0.0.0 --port 8000
 ```
@@ -69,31 +70,34 @@ python ./app/text_sum_endpoint.py
 
 or
 
-Container setup
+#### Container setup
 ```sh
-docker build -t textsum_endpoint .
-docker run -d --name textsum_endpoint -p 8000:8000 textsum_endpoint
+docker-compose -f docker-compose.yml up -d
 ```
 
 Test backend on
 http://localhost:8000/docs
 
+Do note that the Transformer will download up to 2GB of models.
+
 ## Frontend Setup
 
+#### npm dev env
 ```sh
 cd frontend\textsum
 npm install
 npm start
 ```
+This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.
 
 or
 
-for dockerized dev environment
+#### for dockerized dev environment
 ```sh
 cd frontend\textsum
 docker-compose -f docker-compose.dev.yml up -d
 ```
-This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.
+
 
 ## Just run
 ```sh
