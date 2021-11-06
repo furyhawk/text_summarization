@@ -170,7 +170,10 @@ textsummary_model = TextSummaryModel()
 origins = [
     "http://localhost",
     "http://localhost:3000",
-
+    "http://192.168.50.178:3000",
+    "http://172.23.19.127:3000",
+    "http://172.17.0.1",
+    "http://172.17.0.1:3000",
 
 ]
 

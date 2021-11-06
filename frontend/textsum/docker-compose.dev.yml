@@ -1,6 +1,7 @@
 version: '3'
 services: 
     frontend:
+        image: furyhawk/textsum_frontend:latest
         build: 
             context: .
             dockerfile: Dockerfile.dev
