@@ -168,10 +168,14 @@ logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
 
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
-
-
+    "http://0.0.0.0",
+    "http://0.0.0.0:3000",
+    "http://192.168.50.178",
+    "http://192.168.50.178:3000",
+    "http://172.17.0.2",
+    "http://172.17.0.2:3000",
+    "http://172.17.0.3",
+    "http://172.17.0.3:3000",
 ]
 
 app.add_middleware(

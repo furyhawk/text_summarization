@@ -55,6 +55,18 @@ If you need to fine tune your own model, sign up free at https://huggingface.co/
 huggingface-cli login
 ```
 
+#### Container for backend and front setup
+```sh
+docker-compose -f docker-compose.yml up -d
+```
+Test frontend on
+http://localhost:3000/
+Test backend on
+http://localhost:8000/docs
+
+Do note that the Transformer will download up to 2GB of models.
+![Container Init](https://github.com/furyhawk/text_summarization/blob/main/img/endpoint_docker_init.png?raw=true)
+
 ## Backend Setup
 
 #### Commandline run
@@ -68,18 +80,6 @@ or
 python ./app/text_sum_endpoint.py
 ```
 
-or
-
-#### Container setup
-```sh
-docker-compose -f docker-compose.yml up -d
-```
-
-Test backend on
-http://localhost:8000/docs
-
-Do note that the Transformer will download up to 2GB of models.
-
 ## Frontend Setup
 
 #### npm dev env
@@ -90,7 +90,7 @@ npm start
 ```
 This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.
 
-or
+<!-- or
 
 #### for dockerized dev environment
 ```sh
@@ -104,7 +104,18 @@ http://localhost:3000/
 ## Just run
 ```sh
 run
+``` -->
+
+# Pushing a Docker container image to Docker Hub
+To push an image to Docker Hub, you must first name your local image using your Docker Hub username and the repository name that you created through Docker Hub on the web.
+
+You can add multiple images to a repository by adding a specific :<tag> to them (for example docs/base:testing). If it’s not specified, the tag defaults to latest.
+
+```sh
+docker build . -t <hub-user>/textsum_endpoint:latest
+docker push <hub-user>/textsum_endpoint:latest
 ```
+
 # Dataset
 
 This dataset was created using a dataset used for data categorization that onsists of 2225 documents from the BBC news website corresponding to stories in five topical areas from 2004-2005 used in the paper of D. Greene and P. Cunningham. "Practical Solutions to the Problem of Diagonal Dominance in Kernel Document Clustering", Proc. ICML 2006; whose all rights, including copyright, in the content of the original articles are owned by the BBC. More at http://mlg.ucd.ie/datasets/bbc.html

@@ -9,4 +9,12 @@ services:
         command: uvicorn app.text_sum_endpoint:app --host 0.0.0.0 --port 8000
         container_name: textsum_endpoint
         ports:
-            - "8000:8000"        
+            - "8000:8000"
+    frontend:
+        build: 
+            context: ./frontend/textsum
+            dockerfile: Dockerfile.dev
+        command: npm start
+        container_name: textsum_frontend
+        ports:
+            - "3000:3000"        
