@@ -2,7 +2,7 @@ version: '3'
 services:          
     frontend:
         build: .     
-        container_name: frontend
+        container_name: textsum_frontend
         ports:
             - "80:80"
         volumes: 
