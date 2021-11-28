@@ -5,6 +5,6 @@ services:
             context: .
             dockerfile: Dockerfile.dev
         command: npm start
-        container_name: textsum_frontend
+        container_name: textsum_frontend_dev
         ports:
             - "3000:3000"        
