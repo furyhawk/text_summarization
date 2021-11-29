@@ -37,7 +37,8 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             }
         }).then((response) => {
             setBusy(false);
-            setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9), "text": model + " summarized: " + response.data.summarized + "\n" + response.data.metrics }));
+            setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9),
+             "text": model + " summarized: " + response.data.summarized + "\n" + response.data.metrics }));
             setmetrics(response.data.metrics);
         })
     }
@@ -51,28 +52,35 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             noValidate
             autoComplete="off">
             <div>
-                <Stack direction="row"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    spacing={{ xs: 1, sm: 2, md: 4 }}>
-                    <TextField label="Raw Text"
-                        multiline value={text}
-                        placeholder="Input text summary."
-                        onChange={handleChange} disabled={busy} minLength={30}
-                        required={true} resize="none" />
-                    {busy ?
-                        (<CircularProgress />) : (<Button type="submit" onClick={submit}
-                            variant="contained" endIcon={<SendIcon />}
-                            size="large" ><span>Summarize</span></Button>)}
+                <Stack
+                    direction="column"
+                    >
+                    <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={{ xs: 1, sm: 2, md: 4 }}>
+                        <TextField
+                            label="Raw text (x)"
+                            multiline
+                            value={text}
+                            placeholder="Input text summary."
+                            onChange={handleChange} disabled={busy} minLength={30}
+                            required={true} resize="none" />
+                        {busy ?
+                            (<CircularProgress />) : (<Button type="submit" onClick={submit}
+                                variant="contained" endIcon={<SendIcon />}
+                                size="large" ><span>Summarize</span></Button>)}
+                    </Stack>
+                    <TextField
+                        label="Reference summary (y)"
+                        value={textRef}
+                        placeholder="Input reference summary."
+                        onChange={handleRefChange}
+                        multiline
+                        maxRows={3}
+                        disabled={busy} />
                 </Stack>
-                <TextField
-                    label="Reference Text"
-                    value={textRef}
-                    placeholder="Input reference summary."
-                    onChange={handleRefChange}
-                    multiline
-                    maxRows={3}
-                    disabled={busy} />
             </div>
         </Box >
     );

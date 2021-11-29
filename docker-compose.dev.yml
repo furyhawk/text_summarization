@@ -1,8 +1,7 @@
 version: '3.9'
 services: 
-
     backend:
-        image: furyhawk/textsum_endpoint:latest
+        image: textsum_endpoint
         build: 
             context: ./backend
             dockerfile: Dockerfile
@@ -13,15 +12,13 @@ services:
             - "8000:8000"
 
     frontend:
-        build:
+        build: 
             context: ./frontend
-            dockerfile: Dockerfile
-        container_name: textsum_frontend
+            dockerfile: Dockerfile.dev
+        command: npm start
+        container_name: textsum_frontend_dev
         ports:
-            - "80:80"
-        volumes: 
-            - ./:/frontend
-            - /frontend/node_modules 
+            - "3000:3000"
         restart: on-failure
         depends_on:
             - backend

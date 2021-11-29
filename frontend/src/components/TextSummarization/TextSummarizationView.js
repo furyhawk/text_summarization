@@ -12,8 +12,6 @@ export default function TextSummarizationView() {
     const [metrics, setmetrics] = useState("");
     const [model, setModel] = useState("Transformer");
 
-    console.log("start TextSummarizationView");
-
     return (
         <Box
             sx={{
@@ -26,7 +24,10 @@ export default function TextSummarizationView() {
                 zIndex: 'tooltip', // theme.zIndex.tooltip
             }}>
             <ModelSelect model={model} setModel={setModel} />
-            <TextInput text={text} setText={setText} textList={textList} setTextList={setTextList} metrics={metrics} setmetrics={setmetrics} model={model} />
+            <TextInput text={text} setText={setText}
+             textList={textList}
+             setTextList={setTextList} metrics={metrics} 
+             setmetrics={setmetrics} model={model} />
             <Divider variant="middle" sx={{ my: 3, mx: 2 }} />
             <TextList textList={textList} />
         </Box>

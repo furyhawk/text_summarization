@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "react-query";
 import { useMemo } from "react";
 import {
   BrowserRouter as Router,
@@ -16,7 +17,10 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 
 import './App.css';
 
+// const TextSummarizationPage = lazy(() => import("./components/TextSummarization/TextSummarizationPage"));
 import TextSummarizationPage from './components/TextSummarization/TextSummarizationPage';
+
+const queryClient = new QueryClient();
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -32,26 +36,27 @@ function App() {
   );
 
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar variant="dense">
-              <SummarizeIcon sx={{ mr: 2 }} />
-              <Typography variant="h5" color="inherit" component="div">
-                Text Summarization
-              </Typography>
-              <Box sx={{ flexGrow: 1 }} />
-            </Toolbar>
-          </AppBar>
-          <Routes>
-            <Route path="/" element={<TextSummarizationPage />} />
-          </Routes>
-        </Box>
-      </ThemeProvider>
-    </Router>
-
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+              <Toolbar variant="dense">
+                <SummarizeIcon sx={{ mr: 2 }} />
+                <Typography variant="h5" color="inherit" component="div">
+                  Text Summarization
+                </Typography>
+                <Box sx={{ flexGrow: 1 }} />
+              </Toolbar>
+            </AppBar>
+            <Routes>
+              <Route path="/" element={<TextSummarizationPage />} />
+            </Routes>
+          </Box>
+        </ThemeProvider>
+      </Router>
+    </QueryClientProvider>
   );
 }
 
