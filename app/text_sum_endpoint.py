@@ -3,8 +3,11 @@ import logging
 from typing import List, Optional, Tuple
 
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
-from fastapi import FastAPI, Depends, status
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends, status, Request
+from fastapi.middleware.gzip import GZipMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
+# from fastapi.responses import JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel
 from rouge_score import rouge_scorer
 
@@ -163,29 +166,11 @@ class TextSummaryModel:
         return summary
 
 
-app = FastAPI(debug=True)
+
+
+app = FastAPI()
 logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
-
-origins = [
-    "http://0.0.0.0",
-    "http://0.0.0.0:3000",
-    "http://192.168.50.178",
-    "http://192.168.50.178:3000",
-    "http://172.17.0.2",
-    "http://172.17.0.2:3000",
-    "http://172.17.0.3",
-    "http://172.17.0.3:3000",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 @ app.post("/prediction", response_model=PredictionOutput)
 def prediction(
@@ -193,12 +178,64 @@ def prediction(
 ) -> PredictionOutput:
     return output
 
-
 @ app.on_event("startup")
 async def startup():
     logger.info("start")
     # Initialize the HuggingFace summarization pipeline
     textsummary_model.load_model()
+
+def create_app() -> CORSMiddleware:
+    """Create app wrapper to overcome middleware issues."""
+    
+    return CORSMiddleware(
+        app,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+app = create_app()
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:80",
+    "http://localhost:8000",
+]
+# app.add_middleware(GZipMiddleware)
+# app.add_middleware(CORSMiddleware,
+#                    allow_origins=['*'],
+#                    allow_credentials=True,
+#                    allow_methods=['*'],
+#                    allow_headers=['*'])
+
+# app = CORSMiddleware(
+#     app=app,
+#     allow_origins=["*"],
+#     allow_credentials=False,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     # allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=['POST, GET, DELETE, OPTIONS'],
+#     allow_headers=["*"],
+# )
+# @app.options("/{rest_of_path:path}")
+# async def preflight_handler(request: Request, rest_of_path: str) -> Response:
+#     """
+#     Handles OPTIONS requests to /*.
+#     """
+#     response = Response()
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+#     response.headers["Access-Control-Allow-Methods"] = "POST, GET, DELETE, PATCH, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
+#     return response
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
