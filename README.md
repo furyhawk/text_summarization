@@ -55,7 +55,7 @@ If you need to fine tune your own model, sign up free at https://huggingface.co/
 huggingface-cli login
 ```
 
-#### Container for backend and front setup
+# Container for backend and front setup
 ```sh
 docker-compose -f docker-compose.yml up -d
 ```
@@ -66,6 +66,8 @@ http://localhost:8000/docs
 
 Do note that the Transformer will download up to 2GB of models.
 ![Container Init](https://github.com/furyhawk/text_summarization/blob/main/img/endpoint_docker_init.png?raw=true)
+
+You can skip below container setup.
 
 ## Backend Setup
 
