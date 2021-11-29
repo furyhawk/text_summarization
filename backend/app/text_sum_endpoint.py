@@ -16,10 +16,11 @@ import nltk
 from nltk import tokenize
 import numpy as np
 
-MODELS=['Transformer', 'TFIDF', 'T5', 'Finetuned', 'Headline']
+MODELS = ['Transformer', 'TFIDF', 'T5', 'Finetuned', 'Headline']
+
 
 class ModelOutput(BaseModel):
-    model: List[str]
+    model: List[str] = []
 
 
 class PredictionInput(BaseModel):
