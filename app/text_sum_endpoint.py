@@ -1,9 +1,9 @@
 import uvicorn
 import logging
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
-from fastapi import FastAPI, Depends, status, Request
+from fastapi import FastAPI, Depends
 from fastapi.middleware.gzip import GZipMiddleware
 # from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.cors import CORSMiddleware
@@ -165,9 +165,6 @@ class TextSummaryModel:
         print(summary)
         return summary
 
-
-
-
 app = FastAPI()
 logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
@@ -184,58 +181,12 @@ async def startup():
     # Initialize the HuggingFace summarization pipeline
     textsummary_model.load_model()
 
-def create_app() -> CORSMiddleware:
-    """Create app wrapper to overcome middleware issues."""
-    
-    return CORSMiddleware(
-        app,
-        allow_origins=["*"],
-        allow_credentials=False,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-app = create_app()
-
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:80",
-    "http://localhost:8000",
-]
-# app.add_middleware(GZipMiddleware)
-# app.add_middleware(CORSMiddleware,
-#                    allow_origins=['*'],
-#                    allow_credentials=True,
-#                    allow_methods=['*'],
-#                    allow_headers=['*'])
-
-# app = CORSMiddleware(
-#     app=app,
-#     allow_origins=["*"],
-#     allow_credentials=False,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     # allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=['POST, GET, DELETE, OPTIONS'],
-#     allow_headers=["*"],
-# )
-# @app.options("/{rest_of_path:path}")
-# async def preflight_handler(request: Request, rest_of_path: str) -> Response:
-#     """
-#     Handles OPTIONS requests to /*.
-#     """
-#     response = Response()
-#     response.headers["Access-Control-Allow-Origin"] = "*"
-#     response.headers["Access-Control-Allow-Methods"] = "POST, GET, DELETE, PATCH, OPTIONS"
-#     response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
-#     return response
+app.add_middleware(GZipMiddleware)
+app.add_middleware(CORSMiddleware,
+                   allow_origins=['*'],
+                   allow_credentials=True,
+                   allow_methods=['*'],
+                   allow_headers=['*'])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -91,7 +91,7 @@ npm start
 This will create a new browser tab with Summarization App in DEV env. Run again using just 'npm start'.
 
 <!-- or
-
+docker network create --driver bridge localnetwork
 #### for dockerized dev environment
 ```sh
 cd frontend\textsum

@@ -1,5 +1,16 @@
-version: '3'
+version: '3.9'
 services: 
+    frontend:
+        build:
+            context: ./frontend/textsum
+            dockerfile: Dockerfile
+        container_name: textsum_frontend
+        ports:
+            - "80:80"
+        volumes: 
+            - ./:/frontend
+            - /frontend/node_modules 
+
     backend:
         image: textsum_endpoint
         build: 
@@ -10,14 +21,3 @@ services:
         container_name: textsum_endpoint
         ports:
             - "8000:8000"
-    frontend:
-        build:
-            context: ./frontend/textsum
-            dockerfile: Dockerfile
-        container_name: textsum_frontend
-        # command: npm run build
-        ports:
-            - "80:80"
-        volumes: 
-            - ./:/frontend
-            - /frontend/node_modules 

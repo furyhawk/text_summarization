@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-
+const axios = require('axios').default;
 
 export default function TextInput({ text, setText, textList, setTextList, metrics, setmetrics, model }) {
 
@@ -23,32 +23,22 @@ export default function TextInput({ text, setText, textList, setTextList, metric
 
     function submit(event) {
 
-        let url = "http://localhost:8000/prediction";
+        let url = `${window.location.origin}:8000/prediction`;
 
         event.preventDefault();
 
         setBusy(true);
 
-        fetch(url, {
-
-            method: 'POST',
-
+        axios.post(url, {
+            text: text, reference: textRef, modelId: model
+        }, {
             headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                "Access-Control-Allow-Origin": "*"
-            },
-
-            body: JSON.stringify({ text: text, reference: textRef, modelId: model })
-
-        }).then((result) => {
+                'Content-Type': 'application/json;charset=utf-8',
+            }
+        }).then((response) => {
             setBusy(false);
-
-            result.json().then((res) => {
-                console.warn('res', res);
-                setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9), "text": model + " summarized: " + res.summarized + "\n" + res.metrics }));
-                setmetrics(res.metrics);
-            })
-
+            setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9), "text": model + " summarized: " + response.data.summarized + "\n" + response.data.metrics }));
+            setmetrics(response.data.metrics);
         })
     }
 
