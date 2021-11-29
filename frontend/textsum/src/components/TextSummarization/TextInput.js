@@ -23,7 +23,7 @@ export default function TextInput({ text, setText, textList, setTextList, metric
 
     function submit(event) {
 
-        let url = `${window.location.origin}:8000/prediction`;
+        let url = `http://${window.location.hostname}:8000/prediction`;
 
         event.preventDefault();
 
