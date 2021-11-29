@@ -1,4 +1,7 @@
-import { useState } from "react";
+// import { useState } from "react";
+import {useQuery} from "react-query";
+
+import getData from "../../utils/api";
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,7 +10,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function ModelSelect({ model, setModel }) {
-    const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned", "Headline"]);
+    // const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned", "Headline"]);
+    let url = `http://${window.location.hostname}:8000/models`;
+    const {data: models = []} = useQuery(
+        "models",
+        () => getData(url),
+        {
+          suspense: true // enable suspense mode
+        }
+      );
 
     function handleSelect(e) {
         setModel(e.target.value);

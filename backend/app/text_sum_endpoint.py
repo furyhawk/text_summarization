@@ -1,11 +1,14 @@
 import uvicorn
 import logging
-from typing import List, Optional, Tuple
+from typing import List, Optional
+
+
+from fastapi import FastAPI, Depends
+from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
-from fastapi import FastAPI, Depends, status
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from rouge_score import rouge_scorer
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,8 +16,11 @@ import nltk
 from nltk import tokenize
 import numpy as np
 
+MODELS=['Transformer', 'TFIDF', 'T5', 'Finetuned', 'Headline']
+
 class ModelOutput(BaseModel):
-    model: List(str)
+    model: List[str]
+
 
 class PredictionInput(BaseModel):
     text: str
@@ -38,6 +44,10 @@ class TextSummaryModel:
         summarizer = pipeline("summarization")
         self.model = summarizer
         logger.info(self.model)
+
+    def get_model(self) -> ModelOutput:
+        model = MODELS
+        return ModelOutput(model=model)
 
     def predict(self, input: PredictionInput) -> PredictionOutput:
         """Runs a prediction"""
@@ -165,27 +175,16 @@ class TextSummaryModel:
         return summary
 
 
-app = FastAPI(debug=True)
+app = FastAPI()
 logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://192.168.50.178:3000",
-    "http://172.23.19.127:3000",
-    "http://172.17.0.1",
-    "http://172.17.0.1:3000",
 
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@ app.get("/models", response_model=ModelOutput)
+def models(
+    output: ModelOutput = Depends(textsummary_model.get_model),
+) -> ModelOutput:
+    return output
 
 
 @ app.post("/prediction", response_model=PredictionOutput)
@@ -200,6 +199,13 @@ async def startup():
     logger.info("start")
     # Initialize the HuggingFace summarization pipeline
     textsummary_model.load_model()
+
+app.add_middleware(GZipMiddleware)
+app.add_middleware(CORSMiddleware,
+                   allow_origins=['*'],
+                   allow_credentials=True,
+                   allow_methods=['*'],
+                   allow_headers=['*'])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
