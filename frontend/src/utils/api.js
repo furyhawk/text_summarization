@@ -1,24 +1,32 @@
+import axios from './axios';
 
-export default function getData (url, delay = 0) {
-  return fetch(url)
-    .then(resp => {
-      if (!resp.ok) {
+export default function getData(url) {
+  return axios.get(url)
+    .then(response => {
+      if (response.statusText !== "OK") {
         throw Error("There was a problem fetching data.");
       }
 
-      return resp.json().then(json => {
-        return new Promise(resolve => {
-          setTimeout(() => resolve(json), delay);
-        });
-      });
+      return response.data
+
     });
 }
 
-export function getAllModels () {
-  const urlRoot = `http://${window.location.hostname}:8000/models`;
-
-  return getData(`${urlRoot}`);
+export function getAllModels() {
+  return getData("/models");
 }
+
+export function postPrediction(path, prediction) {
+  return axios.post(path, prediction).then(response => {
+      if (response.statusText !== "OK") {
+        throw Error("There was a problem fetching data.");
+      }
+
+      return response.data
+    });
+}
+
+
 
 // export function getBookings (bookableId, startDate, endDate) {
 

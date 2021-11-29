@@ -35,6 +35,8 @@ function App() {
     [prefersDarkMode],
   );
 
+  const REACT_APP_VERSION = `${process.env.REACT_APP_NAME} v${process.env.REACT_APP_VERSION}`;
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -45,7 +47,7 @@ function App() {
               <Toolbar variant="dense">
                 <SummarizeIcon sx={{ mr: 2 }} />
                 <Typography variant="h5" color="inherit" component="div">
-                  Text Summarization
+                  {REACT_APP_VERSION}
                 </Typography>
                 <Box sx={{ flexGrow: 1 }} />
               </Toolbar>

@@ -6,9 +6,14 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-const axios = require('axios').default;
 
-export default function TextInput({ text, setText, textList, setTextList, metrics, setmetrics, model }) {
+import { postPrediction } from "../../utils/api";
+
+export default function TextInput({
+    text, setText,
+    textList, setTextList,
+    metrics, setMetrics, model
+}) {
 
     const [textRef, setTextRef] = useState("");
     const [busy, setBusy] = useState(false);
@@ -22,24 +27,24 @@ export default function TextInput({ text, setText, textList, setTextList, metric
     }
 
     function submit(event) {
-
-        let url = `http://${window.location.hostname}:8000/prediction`;
+        let path = "/prediction";
 
         event.preventDefault();
 
         setBusy(true);
 
-        axios.post(url, {
+        postPrediction(path, {
             text: text, reference: textRef, modelId: model
-        }, {
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-            }
         }).then((response) => {
             setBusy(false);
-            setTextList(textList.concat({ "id": Math.random().toString(36).substr(2, 9),
-             "text": model + " summarized: " + response.data.summarized + "\n" + response.data.metrics }));
-            setmetrics(response.data.metrics);
+            setTextList(textList.concat(
+                {
+                    "id": Math.random().toString(36).substr(2, 9),
+                    "text": model + " summarized: " + response.summarized
+                        + "\n" + response.metrics
+                }
+            ));
+            setMetrics(response.metrics);
         })
     }
 
@@ -54,7 +59,7 @@ export default function TextInput({ text, setText, textList, setTextList, metric
             <div>
                 <Stack
                     direction="column"
-                    >
+                >
                     <Stack
                         direction="row"
                         justifyContent="flex-start"

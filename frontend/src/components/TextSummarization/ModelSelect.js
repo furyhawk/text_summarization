@@ -1,7 +1,7 @@
 // import { useState } from "react";
 import { useQuery } from "react-query";
 
-import getData from "../../utils/api";
+import { getAllModels } from "../../utils/api";
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,10 +12,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ModelSelect({ model, setModel }) {
     // const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned", "Headline"]);
-    let url = `http://${window.location.hostname}:8000/models`;
+
     const { data: models = [model] } = useQuery(
         "models",
-        () => getData(url),
+        () => getAllModels(),
     );
 
     function handleSelect(e) {
