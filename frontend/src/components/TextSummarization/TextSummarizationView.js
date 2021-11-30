@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 export default function TextSummarizationView() {
     const [text, setText] = useState("");
     const [textList, setTextList] = useState([]);
-    const [metrics, setMetrics] = useState("");
+    const [metrics, setMetrics] = useState([]);
     const [model, setModel] = useState("Transformer");
 
     return (
@@ -29,7 +29,7 @@ export default function TextSummarizationView() {
              setTextList={setTextList} metrics={metrics} 
              setMetrics={setMetrics} model={model} />
             <Divider variant="middle" sx={{ my: 3, mx: 2 }} />
-            <TextList textList={textList} />
+            <TextList textList={textList} metrics={metrics} />
         </Box>
     );
 }

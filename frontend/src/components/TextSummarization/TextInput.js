@@ -41,10 +41,10 @@ export default function TextInput({
                 {
                     "id": Math.random().toString(36).substr(2, 9),
                     "text": model + " summarized: " + response.summarized
-                        + "\n" + response.metrics
+                        // + "\n" + response.metrics
                 }
             ));
-            setMetrics(response.metrics);
+            setMetrics(metrics.concat(response.metrics));
         })
     }
 
@@ -83,7 +83,7 @@ export default function TextInput({
                         placeholder="Input reference summary."
                         onChange={handleRefChange}
                         multiline
-                        maxRows={3}
+                        maxRows={5}
                         disabled={busy} />
                 </Stack>
             </div>

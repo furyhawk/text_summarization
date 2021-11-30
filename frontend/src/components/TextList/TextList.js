@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
-export default function TextList({ textList }) {
+export default function TextList({ textList, metrics }) {
     return (
         <div>
 
@@ -28,11 +28,21 @@ export default function TextList({ textList }) {
                 {textList
                     .slice(0)
                     .reverse()
-                    .map(b => (
+                    .map((b, index) => (
                         <ListItem key={b.id}>
                             <Card variant="outlined">
                                 <CardContent>
-                                    {b.text}
+                                    <Typography variant="h7" component="div"
+                                        color="text.secondary">
+                                        {b.text.split(":")[0]}:
+                                    </Typography>
+                                    <Typography variant="h4" component="div">
+                                        {b.text.split(":")[1]}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 10 }} color="text.secondary"
+                                        component="div">
+                                        {metrics[index]}
+                                    </Typography>
                                 </CardContent>
                             </Card>
 
