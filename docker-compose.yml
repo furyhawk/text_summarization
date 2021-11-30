@@ -2,8 +2,7 @@ version: '3.9'
 services: 
 
     backend:
-        image: furyhawk/textsum_endpoint:latest
-        build: 
+        build:
             context: ./backend
             dockerfile: Dockerfile
             

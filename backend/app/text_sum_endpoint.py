@@ -5,7 +5,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
-from models.models import TextSummaryModel, ModelOutput, PredictionOutput
+from app.models.models import TextSummaryModel, ModelOutput, PredictionOutput
 
 app = FastAPI()
 logger = logging.getLogger("app")

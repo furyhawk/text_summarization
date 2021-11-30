@@ -72,12 +72,16 @@ You can skip below container setup.
 ## Backend Setup
 
 #### Commandline run
+
+ from /backend
+```sh
+cd backend
+```
+run
 ```sh
 uvicorn app.text_sum_endpoint:app --host 0.0.0.0 --port 8000
 ```
-
 or
-
 ```sh
 python ./app/text_sum_endpoint.py
 ```
