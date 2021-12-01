@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { useQuery } from "react-query";
 
 import { getAllModels } from "../../utils/api";
@@ -11,7 +10,6 @@ import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ModelSelect({ model, setModel }) {
-    // const [models] = useState(["TFIDF", "Transformer", "T5", "Finetuned", "Headline"]);
 
     const { data: models = [model] } = useQuery(
         "models",
@@ -33,7 +31,7 @@ export default function ModelSelect({ model, setModel }) {
                     label="Model"
                     onChange={handleSelect}
                 >
-                    {models.model ? (models.model.map((u, index) => (
+                    {models?.model ? (models.model.map((u, index) => (
                         <MenuItem key={index} value={u}>{u}</MenuItem>
                     ))) : (<CircularProgress />)}
                 </Select>

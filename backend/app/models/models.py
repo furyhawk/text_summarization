@@ -142,8 +142,10 @@ class TextSummaryModel():
         summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         return summary
 
+
 # Create Singleton
 textSummaryModel = TextSummaryModel()
+
 
 def get_model():
 
