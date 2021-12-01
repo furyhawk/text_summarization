@@ -79,11 +79,11 @@ cd backend
 ```
 run
 ```sh
-uvicorn app.text_sum_endpoint:app --host 0.0.0.0 --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 or
 ```sh
-python ./app/text_sum_endpoint.py
+python ./app/main.py
 ```
 
 ## Frontend Setup

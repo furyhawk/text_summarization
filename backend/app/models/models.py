@@ -41,7 +41,7 @@ class TextSummaryModel():
         summarizer = pipeline("summarization")
         self.model = summarizer
 
-    def get_model(self) -> ModelOutput:
+    def get_models(self) -> ModelOutput:
         model = MODELS
         return ModelOutput(model=model)
 
@@ -141,3 +141,10 @@ class TextSummaryModel():
                                  num_beams=4, early_stopping=True)
         summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         return summary
+
+# Create Singleton
+textSummaryModel = TextSummaryModel()
+
+def get_model():
+
+    return textSummaryModel

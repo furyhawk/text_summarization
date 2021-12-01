@@ -10,7 +10,6 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 export default function TextList({ textList, metrics }) {
     return (
         <div>
-
             <List>
                 <Stack direction="row"
                     justifyContent="center"
@@ -45,7 +44,6 @@ export default function TextList({ textList, metrics }) {
                                     </Typography>
                                 </CardContent>
                             </Card>
-
                         </ListItem>
 
                     ))}

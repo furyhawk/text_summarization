@@ -6,22 +6,28 @@ from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from app.models.models import TextSummaryModel, ModelOutput, PredictionOutput
+from app.core.config import Settings
 
-app = FastAPI()
+
+settings = Settings()
+app = FastAPI(title=settings.PROJECT_NAME)
 logger = logging.getLogger("app")
 textsummary_model = TextSummaryModel()
 
+
 @ app.get("/models", response_model=ModelOutput)
 async def models(
-    output: ModelOutput = Depends(textsummary_model.get_model),
+    output: ModelOutput = Depends(textsummary_model.get_models),
 ) -> ModelOutput:
     return output
+
 
 @ app.post("/prediction", response_model=PredictionOutput)
 def prediction(
     output: PredictionOutput = Depends(textsummary_model.predict),
 ) -> PredictionOutput:
     return output
+
 
 @ app.on_event("startup")
 async def startup():
@@ -36,4 +42,4 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=['*'])
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
