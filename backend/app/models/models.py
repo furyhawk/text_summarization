@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from logging.config import dictConfig
 import logging
 
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
@@ -10,8 +11,9 @@ import nltk
 from nltk import tokenize
 import numpy as np
 
-MODELS = ['Transformer', 'TFIDF', 'T5', 'Finetuned', 'Headline']
-logger = logging.getLogger(__name__)
+from app.core.config import LogConfig, get_settings
+
+MODELS = get_settings().MODELS
 
 
 class ModelOutput(BaseModel):
@@ -30,13 +32,20 @@ class PredictionOutput(BaseModel):
 
 
 class TextSummaryModel():
-    logger: logger
+
     model: Optional[pipeline]
     targets: Optional[List[str]]
 
+    def __init__(self):
+        dictConfig(LogConfig().dict())
+        logger = logging.getLogger("app")
+        self.logger = logger
+
     def load_model(self):
-        nltk.download('punkt')
         """Loads the model"""
+        self.logger.info("Preloading transformer pipleine")
+        nltk.download('punkt')
+
         # Initialize the HuggingFace summarization pipeline
         summarizer = pipeline("summarization")
         self.model = summarizer
@@ -46,20 +55,20 @@ class TextSummaryModel():
         return ModelOutput(model=model)
 
     def predict(self, input: PredictionInput) -> PredictionOutput:
-        """Runs a prediction"""
+        """Summarize text input(x) to (y)"""
         if not self.model:
             raise RuntimeError("Model is not loaded")
 
-        # self.logger.info(input.text)
+        self.logger.info(input.text)
 
         # Parameters
         target = input.reference
         modelId = input.modelId
 
-        min_length = 15
-        max_length = 150
-        headline_min_length = 7
-        headline_max_length = 20
+        min_length = get_settings().MIN_LENGTH
+        max_length = get_settings().MAX_LENGTH
+        headline_min_length = get_settings().HEADLINE_MIN_LENGTH
+        headline_max_length = get_settings().HEADLINE_MAX_LENGTH
 
         prediction = 'No result'
 
@@ -80,10 +89,10 @@ class TextSummaryModel():
         if modelId == 'Headline':
             prediction = self.t5_summary(t5model="furyhawk/t5-base-finetuned-bbc-headline",
                                          text=input.text,
-                                         min_length=min_length, max_length=max_length)
+                                         min_length=headline_min_length, max_length=headline_max_length)
 
         # Print summarized text
-        # self.logger.info(prediction)
+        self.logger.info(prediction)
         scorer = rouge_scorer.RougeScorer(
             ['rouge1', 'rouge2', 'rougeL', 'rougeLsum'], use_stemmer=True)
         # Calculates rouge scores between the target and prediction.
@@ -94,11 +103,9 @@ class TextSummaryModel():
 
     def print_rouge_score(self, rouge_score):
         """format and print rouge score"""
-        # output = ''
         for k, v in rouge_score.items():
             print(k, 'Precision:', "{:.2f}".format(v.precision), 'Recall:', "{:.2f}".format(
                 v.recall), 'fmeasure:', "{:.2f}".format(v.fmeasure))
-        # return output
 
     def output_rouge_score(self, rouge_score):
         """format and output rouge score"""
@@ -120,7 +127,6 @@ class TextSummaryModel():
             if i in important_sentences[:num_summary_sentence]:
                 summary_sentence = summary_sentence + sentences[i]
 
-        print(summary_sentence)
         return summary_sentence
 
     def transformer_summary(self, text, min_length=3, max_length=512):
@@ -130,6 +136,7 @@ class TextSummaryModel():
         return summarized[0]["summary_text"]
 
     def t5_summary(self, t5model="t5-base", text="", min_length=3, max_length=512):
+        """Google T5 huggingface transformer pipeline summary task"""
         model = AutoModelForSeq2SeqLM.from_pretrained(t5model)
         tokenizer = AutoTokenizer.from_pretrained(t5model)
 
