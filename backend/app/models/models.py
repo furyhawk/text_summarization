@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Any
 from logging.config import dictConfig
 import logging
 
@@ -32,8 +32,7 @@ class PredictionOutput(BaseModel):
 
 
 class TextSummaryModel():
-
-    model: Optional[pipeline]
+    model: Optional[Any]
     targets: Optional[List[str]]
 
     def __init__(self):
@@ -46,9 +45,9 @@ class TextSummaryModel():
         self.logger.info("Preloading transformer pipleine")
         nltk.download('punkt')
 
-        # Initialize the HuggingFace summarization pipeline
-        summarizer = pipeline("summarization")
-        self.model = summarizer
+        """Default init Google T5 huggingface transformer pipeline summary task"""
+        self.model = AutoModelForSeq2SeqLM.from_pretrained("furyhawk/t5-base-finetuned-bbc-headline")
+        self.tokenizer = AutoTokenizer.from_pretrained("furyhawk/t5-base-finetuned-bbc-headline")
 
     def get_models(self) -> ModelOutput:
         model = MODELS
@@ -73,21 +72,33 @@ class TextSummaryModel():
         prediction = 'No result'
 
         if modelId == 'Transformer':
+            # Initialize the HuggingFace summarization pipeline
+            summarizer = pipeline("summarization")
+            self.model = summarizer
             prediction = self.transformer_summary(
                 text=input.text, min_length=min_length, max_length=max_length)
         if modelId == 'TFIDF':
             prediction = self.tfidf_summary(
                 text=input.text, num_summary_sentence=1)
         if modelId == 'T5':
-            prediction = self.t5_summary(t5model="t5-base",
+            t5model="t5-base"
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(t5model)
+            self.tokenizer = AutoTokenizer.from_pretrained(t5model)
+            prediction = self.t5_summary(
                                          text=input.text,
                                          min_length=min_length, max_length=max_length)
         if modelId == 'Finetuned':
-            prediction = self.t5_summary(t5model="furyhawk/t5-base-finetuned-bbc",
+            t5model="furyhawk/t5-base-finetuned-bbc"
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(t5model)
+            self.tokenizer = AutoTokenizer.from_pretrained(t5model)
+            prediction = self.t5_summary(
                                          text=input.text,
                                          min_length=min_length, max_length=max_length)
         if modelId == 'Headline':
-            prediction = self.t5_summary(t5model="furyhawk/t5-base-finetuned-bbc-headline",
+            t5model="furyhawk/t5-base-finetuned-bbc-headline"
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(t5model)
+            self.tokenizer = AutoTokenizer.from_pretrained(t5model)
+            prediction = self.t5_summary(
                                          text=input.text,
                                          min_length=headline_min_length, max_length=headline_max_length)
 
@@ -135,18 +146,16 @@ class TextSummaryModel():
             text, min_length=min_length, max_length=max_length)
         return summarized[0]["summary_text"]
 
-    def t5_summary(self, t5model="t5-base", text="", min_length=3, max_length=512):
+    def t5_summary(self, text="", min_length=3, max_length=512):
         """Google T5 huggingface transformer pipeline summary task"""
-        model = AutoModelForSeq2SeqLM.from_pretrained(t5model)
-        tokenizer = AutoTokenizer.from_pretrained(t5model)
 
         # T5 uses a max_length of 512 so we cut the article to 512 tokens.
-        inputs = tokenizer("summarize: " + text,
+        inputs = self.tokenizer("summarize: " + text,
                            return_tensors="pt", max_length=512, truncation=True)
-        outputs = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'],
+        outputs = self.model.generate(input_ids=inputs["input_ids"], attention_mask=inputs['attention_mask'],
                                  max_length=max_length, min_length=min_length, length_penalty=0.1,
                                  num_beams=4, early_stopping=True)
-        summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        summary = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         return summary
 
 
