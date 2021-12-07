@@ -35,7 +35,7 @@ function App() {
     [prefersDarkMode],
   );
 
-  const REACT_APP_VERSION = `${process.env.REACT_APP_NAME} v${process.env.REACT_APP_VERSION}`;
+  const REACT_APP_VERSION = "TextSum v0.13 arm64";
 
   return (
     <QueryClientProvider client={queryClient}>
