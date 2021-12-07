@@ -5,12 +5,5 @@ nltk
 numpy
 pandas
 matplotlib
-transformers
-datasets
 scikit-learn
-ipywidgets
 rouge_score
---find-links https://download.pytorch.org/whl/torch_stable.html
-torch==1.9.1+cpu
-torchvision==0.10.1+cpu
-torchaudio==0.9.1

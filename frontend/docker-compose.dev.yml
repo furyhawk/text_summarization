@@ -1,11 +1,11 @@
 version: '3'
 services: 
     frontend:
-        image: furyhawk/textsum_frontend:latest
+        image: furyhawk/textsum_frontend_arm64:latest
         build: 
             context: .
             dockerfile: Dockerfile.dev
         command: npm start
-        container_name: textsum_frontend_dev
+        container_name: textsum_frontend_dev_arm64
         ports:
             - "3000:3000"        

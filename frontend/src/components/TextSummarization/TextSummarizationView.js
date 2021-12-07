@@ -10,7 +10,7 @@ export default function TextSummarizationView() {
     const [text, setText] = useState("");
     const [textList, setTextList] = useState([]);
     const [metrics, setMetrics] = useState([]);
-    const [model, setModel] = useState("Headline");
+    const [model, setModel] = useState("TFIDF");
 
     return (
         <Box

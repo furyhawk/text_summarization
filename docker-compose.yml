@@ -2,22 +2,22 @@ version: '3.9'
 services: 
 
     backend:
-        image: furyhawk/textsum_endpoint
+        image: furyhawk/textsum_endpoint_arm64
         build:
             context: ./backend
             dockerfile: Dockerfile
             
         command: uvicorn app.main:app --host 0.0.0.0 --port 8000
-        container_name: textsum_endpoint
+        container_name: textsum_endpoint_arm64
         ports:
             - "8000:8000"
 
     frontend:
-        image: furyhawk/textsum_frontend
+        image: furyhawk/textsum_frontend_arm64
         build:
             context: ./frontend
             dockerfile: Dockerfile
-        container_name: textsum_frontend
+        container_name: textsum_frontend_arm64
         ports:
             - "80:80"
         volumes: 

@@ -5,8 +5,7 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "textsum"
-    MODELS: List[str] = ['Headline', 'Transformer',
-                         'TFIDF', 'T5', 'Finetuned']
+    MODELS: List[str] = ['TFIDF']
     MIN_LENGTH: int = 15
     MAX_LENGTH: int = 150
     HEADLINE_MIN_LENGTH = 7
